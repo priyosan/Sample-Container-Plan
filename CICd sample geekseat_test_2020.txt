@@ -1,0 +1,42 @@
+
+# #!/bin/bash
+#source cicd/.env.template
+source cicd/script/setup.sh
+
+
+#TEMPLATE_TYPE="$( cut -d '#' -f 1 <<< $TEMPLATE )"
+#PORT="$( cut -d '#' -f 2 <<< $TEMPLATE )"
+#DOCKER_REPO="Namarepo Gitops" ( *sesuai dengan Git repostory )
+#IMAGE_NAME=${REPO_NAME}
+
+CMD=$1
+
+case $CMD in
+    build)
+        echo "🛠 build step ..."
+source cicd/template/${TEMPLATE_TYPE}/build.sh
+        ;;
+    test)
+        echo " 🧪 test"
+source cicd/template/${TEMPLATE_TYPE}/test.sh
+        ;;
+    release)
+        echo "🚀 release"
+docker push ${DOCKER_REPO}/${IMAGE_NAME}:${TAG_LATEST} && docker push ${DOCKER_REPO}/${IMAGE_NAME}:${TAG_VERSION}
+        ;;
+    info)
+        echo "info"
+echo "TAG_LATEST  :${DOCKER_REPO}/${IMAGE_NAME}:${TAG_LATEST}"
+echo "TAG_VERSION :${DOCKER_REPO}/${IMAGE_NAME}:${TAG_VERSION}"
+echo "TEMPLATE    :${TEMPLATE_TYPE}"
+echo "PORT        :${PORT}"
+echo "NAMESPACE   :${NAMESPACE}"
+echo "SERVICE_NAME:${IMAGE_NAME}"
+        ;;
+
+    *)
+        echo "Usage : build | start <image_tag> | stop | remove | rmi"
+        ;;
+esac
+
+exit 0

@@ -1,0 +1,26 @@
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: Sample-busybox
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000000"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-sample-less
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000"
+EOF
